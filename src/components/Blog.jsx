@@ -7,25 +7,26 @@ const Blog = ({ blog, updateBlog }) => {
   const toggleVisibility = () => setVisible(!visible);
 
   const handleLike = async () => {
-    // Verificamos si el blog tiene la propiedad `id` o `_id`
     if (!blog._id) {
       console.error("El ID del blog está vacío o no está definido.");
-      return; // No hacer nada si el ID no está disponible
+      return;
     }
 
-    // Actualizamos el objeto del blog con el like incrementado
     const updatedBlog = {
       ...blog,
-      likes: blog.likes + 1, // Incrementar el número de likes
-      user: blog.user._id, // Asegurarse de que la referencia al usuario es correcta
+      likes: blog.likes + 1,
+      user: blog.user._id, // Asegúrate de que la referencia al usuario sea correcta
     };
 
     try {
-      // Usamos el _id correcto dependiendo de la estructura del objeto
+      // Actualiza el blog con el _id correcto
       const returnedBlog = await blogService.update(blog._id, updatedBlog);
 
-      // Actualizamos solo el blog específico en el estado
-      updateBlog(returnedBlog); // Asegúrate de que esta función solo actualice el blog correcto
+      // Actualizamos el blog específico con el usuario
+      updateBlog({
+        ...returnedBlog,
+        user: blog.user, // Añadimos explícitamente el usuario
+      });
     } catch (error) {
       console.error("Error al actualizar likes:", error);
     }
@@ -51,7 +52,7 @@ const Blog = ({ blog, updateBlog }) => {
           <p>
             Likes: {blog.likes} <button onClick={handleLike}>like</button>
           </p>
-          <p>{blog.user?.name}</p>
+          <p>{blog.user?.name}</p> {/* Mostrar el nombre del usuario */}
         </div>
       )}
     </div>

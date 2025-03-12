@@ -78,7 +78,6 @@ const App = () => {
   };
 
   const updateBlog = (updatedBlog) => {
-    // Actualiza solo el blog modificado en el estado
     setBlogs(
       blogs.map((blog) => (blog._id === updatedBlog._id ? updatedBlog : blog))
     );
