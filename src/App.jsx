@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BlogForm from "./components/BlogForm";
 import Blog from "./components/Blog";
-import LoginForm from "./components/LoginForm"; // Importación correcta del formulario de login
+import LoginForm from "./components/LoginForm";
 import loginService from "./services/login";
 import blogService from "./services/blogs";
 import Notification from "./components/Notification";
@@ -11,13 +11,13 @@ const App = () => {
   const [newBlog, setNewBlog] = useState({ title: "", author: "", url: "" });
   const [errorMessage, setErrorMessage] = useState(null);
   const [user, setUser] = useState(null);
+  const [username, setUsername] = useState(""); // <-- Agregado
+  const [password, setPassword] = useState(""); // <-- Agregado
 
-  // Obtener blogs al cargar el componente
   useEffect(() => {
     blogService.getAll().then((initialBlogs) => setBlogs(initialBlogs));
   }, []);
 
-  // Verificar si el usuario está logueado al cargar la aplicación
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser");
     if (loggedUserJSON) {
@@ -27,7 +27,6 @@ const App = () => {
     }
   }, []);
 
-  // Manejo del login
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
@@ -35,8 +34,8 @@ const App = () => {
       window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
       blogService.setToken(user.token);
       setUser(user);
-      setUsername("");
-      setPassword("");
+      setUsername(""); // <-- Limpiar después de iniciar sesión
+      setPassword(""); // <-- Limpiar después de iniciar sesión
     } catch (exception) {
       setErrorMessage("Wrong credentials");
       setTimeout(() => {
@@ -45,7 +44,6 @@ const App = () => {
     }
   };
 
-  // Agregar un nuevo blog
   const addBlog = async (event) => {
     event.preventDefault();
     try {
@@ -68,7 +66,13 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       {user === null ? (
-        <LoginForm handleLogin={handleLogin} />
+        <LoginForm
+          handleLogin={handleLogin}
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
+        />
       ) : (
         <div>
           <p>{user.name} logged in</p>
