@@ -11,8 +11,8 @@ const App = () => {
   const [newBlog, setNewBlog] = useState({ title: "", author: "", url: "" });
   const [errorMessage, setErrorMessage] = useState(null);
   const [user, setUser] = useState(null);
-  const [username, setUsername] = useState(""); // <-- Agregado
-  const [password, setPassword] = useState(""); // <-- Agregado
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     blogService.getAll().then((initialBlogs) => setBlogs(initialBlogs));
@@ -34,8 +34,8 @@ const App = () => {
       window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
       blogService.setToken(user.token);
       setUser(user);
-      setUsername(""); // <-- Limpiar después de iniciar sesión
-      setPassword(""); // <-- Limpiar después de iniciar sesión
+      setUsername("");
+      setPassword("");
     } catch (exception) {
       setErrorMessage("Wrong credentials");
       setTimeout(() => {
@@ -43,7 +43,6 @@ const App = () => {
       }, 5000);
     }
   };
-
   const addBlog = async (event) => {
     event.preventDefault();
     try {
@@ -55,7 +54,15 @@ const App = () => {
         setErrorMessage(null);
       }, 5000);
     } catch (exception) {
-      setErrorMessage("Error adding blog");
+      console.error(
+        "Error en la creación del blog:",
+        exception.response || exception.message
+      );
+      setErrorMessage(
+        `Error: ${
+          exception.response ? exception.response.data.error : exception.message
+        }`
+      );
       setTimeout(() => {
         setErrorMessage(null);
       }, 5000);
