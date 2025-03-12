@@ -1,5 +1,4 @@
 import axios from "axios";
-
 const baseUrl = "/api/blogs";
 
 let token = null;
@@ -21,4 +20,10 @@ const create = async (newBlog) => {
   return response.data;
 };
 
-export default { getAll, create, setToken };
+// Actualizar likes
+const update = async (id, updatedBlog) => {
+  const response = await axios.put(`${baseUrl}/${id}`, updatedBlog);
+  return response.data;
+};
+
+export default { getAll, create, update, setToken };

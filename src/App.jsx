@@ -16,7 +16,11 @@ const App = () => {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    blogService.getAll().then((initialBlogs) => setBlogs(initialBlogs));
+    blogService.getAll().then((initialBlogs) => {
+      // Ordenar los blogs por likes (de mayor a menor)
+      const sortedBlogs = initialBlogs.sort((a, b) => b.likes - a.likes);
+      setBlogs(sortedBlogs);
+    });
   }, []);
 
   useEffect(() => {
@@ -62,10 +66,6 @@ const App = () => {
         setErrorMessage(null);
       }, 5000);
     } catch (exception) {
-      console.error(
-        "Error en la creación del blog:",
-        exception.response || exception.message
-      );
       setErrorMessage(
         `Error: ${
           exception.response ? exception.response.data.error : exception.message
@@ -75,6 +75,12 @@ const App = () => {
         setErrorMessage(null);
       }, 5000);
     }
+  };
+
+  const updateBlog = (updatedBlog) => {
+    setBlogs(
+      blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
+    );
   };
 
   return (
@@ -102,7 +108,7 @@ const App = () => {
           </Togglable>
           <div>
             {blogs.map((blog) => (
-              <Blog key={blog.id} blog={blog} />
+              <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
             ))}
           </div>
         </div>
