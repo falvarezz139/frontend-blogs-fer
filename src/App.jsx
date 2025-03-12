@@ -78,8 +78,9 @@ const App = () => {
   };
 
   const updateBlog = (updatedBlog) => {
+    // Actualiza solo el blog modificado en el estado
     setBlogs(
-      blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
+      blogs.map((blog) => (blog._id === updatedBlog._id ? updatedBlog : blog))
     );
   };
 
@@ -108,7 +109,7 @@ const App = () => {
           </Togglable>
           <div>
             {blogs.map((blog) => (
-              <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+              <Blog key={blog._id} blog={blog} updateBlog={updateBlog} />
             ))}
           </div>
         </div>
