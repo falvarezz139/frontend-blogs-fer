@@ -4,11 +4,8 @@ const Blog = ({ blog }) => {
   return (
     <div>
       <h3>
-        {blog.title} by {blog.author}
+        {blog.title} | | {blog.author}
       </h3>
-      <a href={blog.url} target="_blank" rel="noopener noreferrer">
-        {blog.url}
-      </a>
     </div>
   );
 };
