@@ -1,11 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Blog = ({ blog }) => {
+  const [visible, setVisible] = useState(false);
+
+  const toggleVisibility = () => {
+    setVisible(!visible);
+  };
+
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: "solid",
+    borderWidth: 1,
+    marginBottom: 5,
+  };
+
   return (
-    <div>
-      <h3>
-        {blog.title} | | {blog.author}
-      </h3>
+    <div style={blogStyle}>
+      <div>
+        {blog.title} | | {blog.author}{" "}
+        <button onClick={toggleVisibility}>{visible ? "hide" : "view"}</button>
+      </div>
+      {visible && (
+        <div>
+          <p>{blog.url}</p>
+          <p>
+            Likes: {blog.likes} <button>like</button>
+          </p>
+          <p>{blog.user?.name}</p>
+        </div>
+      )}
     </div>
   );
 };
