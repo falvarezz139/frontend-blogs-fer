@@ -5,6 +5,7 @@ import LoginForm from "./components/LoginForm";
 import loginService from "./services/login";
 import blogService from "./services/blogs";
 import Notification from "./components/Notification";
+import Togglable from "./components/Togglable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -43,6 +44,13 @@ const App = () => {
       }, 5000);
     }
   };
+
+  const handleLogout = () => {
+    window.localStorage.removeItem("loggedBlogAppUser");
+    setUser(null);
+    blogService.setToken(null);
+  };
+
   const addBlog = async (event) => {
     event.preventDefault();
     try {
@@ -82,12 +90,16 @@ const App = () => {
         />
       ) : (
         <div>
-          <p>{user.name} logged in</p>
-          <BlogForm
-            newBlog={newBlog}
-            setNewBlog={setNewBlog}
-            addBlog={addBlog}
-          />
+          <p>
+            {user.name} logged in <button onClick={handleLogout}>logout</button>
+          </p>
+          <Togglable buttonLabel="create new blog">
+            <BlogForm
+              newBlog={newBlog}
+              setNewBlog={setNewBlog}
+              addBlog={addBlog}
+            />
+          </Togglable>
           <div>
             {blogs.map((blog) => (
               <Blog key={blog.id} blog={blog} />
