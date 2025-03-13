@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import blogService from "../services/blogs";
 
-const Blog = ({ blog, updateBlog }) => {
+const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
   const [visible, setVisible] = useState(false);
 
   const toggleVisibility = () => setVisible(!visible);
@@ -15,20 +15,23 @@ const Blog = ({ blog, updateBlog }) => {
     const updatedBlog = {
       ...blog,
       likes: blog.likes + 1,
-      user: blog.user._id, // Asegúrate de que la referencia al usuario sea correcta
+      user: blog.user._id, // Mantiene la referencia del usuario
     };
 
     try {
-      // Actualiza el blog con el _id correcto
       const returnedBlog = await blogService.update(blog._id, updatedBlog);
-
-      // Actualizamos el blog específico con el usuario
-      updateBlog({
-        ...returnedBlog,
-        user: blog.user, // Añadimos explícitamente el usuario
-      });
+      updateBlog({ ...returnedBlog, user: blog.user }); // Mantiene el usuario
     } catch (error) {
       console.error("Error al actualizar likes:", error);
+    }
+  };
+
+  const handleDelete = () => {
+    if (window.confirm(`Delete blog "${blog.title}" by ${blog.author}?`)) {
+      console.log("Eliminando blog con ID:", blog._id); // Log para depurar
+      deleteBlog(blog._id).catch((error) => {
+        console.error("Error al eliminar el blog:", error); // Log de error si algo falla
+      });
     }
   };
 
@@ -52,7 +55,15 @@ const Blog = ({ blog, updateBlog }) => {
           <p>
             Likes: {blog.likes} <button onClick={handleLike}>like</button>
           </p>
-          <p>{blog.user?.name}</p> {/* Mostrar el nombre del usuario */}
+          <p>{blog.user?.name}</p>
+          {user && blog.user?.username === user.username && (
+            <button
+              onClick={handleDelete}
+              style={{ backgroundColor: "red", color: "white" }}
+            >
+              Delete
+            </button>
+          )}
         </div>
       )}
     </div>

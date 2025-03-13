@@ -17,9 +17,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then((initialBlogs) => {
-      // Ordenar los blogs por likes (de mayor a menor)
-      const sortedBlogs = initialBlogs.sort((a, b) => b.likes - a.likes);
-      setBlogs(sortedBlogs);
+      setBlogs(initialBlogs.sort((a, b) => b.likes - a.likes));
     });
   }, []);
 
@@ -43,9 +41,7 @@ const App = () => {
       setPassword("");
     } catch (exception) {
       setErrorMessage("Wrong credentials");
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
+      setTimeout(() => setErrorMessage(null), 5000);
     }
   };
 
@@ -59,30 +55,46 @@ const App = () => {
     event.preventDefault();
     try {
       const blog = await blogService.create(newBlog);
-      const updatedBlogs = [...blogs, blog].sort((a, b) => b.likes - a.likes);
-      setBlogs(updatedBlogs);
+      setBlogs([...blogs, blog].sort((a, b) => b.likes - a.likes));
       setNewBlog({ title: "", author: "", url: "" });
       setErrorMessage("Blog added successfully");
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
+      setTimeout(() => setErrorMessage(null), 5000);
     } catch (exception) {
       setErrorMessage(
-        `Error: ${
-          exception.response ? exception.response.data.error : exception.message
-        }`
+        `Error: ${exception.response?.data.error || exception.message}`
       );
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
+      setTimeout(() => setErrorMessage(null), 5000);
     }
   };
 
   const updateBlog = (updatedBlog) => {
-    const updatedBlogs = blogs
-      .map((blog) => (blog._id === updatedBlog._id ? updatedBlog : blog))
-      .sort((a, b) => b.likes - a.likes);
-    setBlogs(updatedBlogs);
+    setBlogs(
+      blogs
+        .map((blog) => (blog._id === updatedBlog._id ? updatedBlog : blog))
+        .sort((a, b) => b.likes - a.likes)
+    );
+  };
+
+  const deleteBlog = async (id) => {
+    const blogToDelete = blogs.find((blog) => blog._id === id);
+    if (!blogToDelete) return;
+
+    if (
+      !window.confirm(
+        `Remove blog "${blogToDelete.title}" by ${blogToDelete.author}?`
+      )
+    )
+      return;
+
+    try {
+      await blogService.deleteBlog(id);
+      setBlogs(blogs.filter((blog) => blog._id !== id));
+      setErrorMessage("Blog deleted successfully");
+      setTimeout(() => setErrorMessage(null), 5000);
+    } catch (exception) {
+      setErrorMessage("Error deleting blog");
+      setTimeout(() => setErrorMessage(null), 5000);
+    }
   };
 
   return (
@@ -110,7 +122,13 @@ const App = () => {
           </Togglable>
           <div>
             {blogs.map((blog) => (
-              <Blog key={blog._id} blog={blog} updateBlog={updateBlog} />
+              <Blog
+                key={blog._id}
+                blog={blog}
+                updateBlog={updateBlog}
+                deleteBlog={deleteBlog}
+                user={user}
+              />
             ))}
           </div>
         </div>
