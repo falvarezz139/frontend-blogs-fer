@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import blogService from "../services/blogs";
+// Eliminar la importación de React si no es necesario
+import { useState } from "react";
+import blogService from "../services/blogs"; // Asegúrate de importar blogService
+import PropTypes from "prop-types";
 
 const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
   const [visible, setVisible] = useState(false);
@@ -68,6 +70,26 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
       )}
     </div>
   );
+};
+
+Blog.propTypes = {
+  blog: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    likes: PropTypes.number.isRequired,
+    user: PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired, // Validación de name
+      username: PropTypes.string.isRequired, // Validación de username
+    }).isRequired,
+    title: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+  }).isRequired,
+  updateBlog: PropTypes.func.isRequired,
+  deleteBlog: PropTypes.func.isRequired,
+  user: PropTypes.shape({
+    username: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default Blog;
