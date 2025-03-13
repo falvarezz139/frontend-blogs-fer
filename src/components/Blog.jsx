@@ -1,6 +1,6 @@
 // Eliminar la importación de React si no es necesario
 import { useState } from "react";
-import blogService from "../services/blogs"; // Asegúrate de importar blogService
+import blogService from "../services/blogs";
 import PropTypes from "prop-types";
 
 const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
@@ -17,12 +17,12 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
     const updatedBlog = {
       ...blog,
       likes: blog.likes + 1,
-      user: blog.user._id, // Mantiene la referencia del usuario
+      user: blog.user._id,
     };
 
     try {
       const returnedBlog = await blogService.update(blog._id, updatedBlog);
-      updateBlog({ ...returnedBlog, user: blog.user }); // Mantiene el usuario
+      updateBlog({ ...returnedBlog, user: blog.user });
     } catch (error) {
       console.error("Error al actualizar likes:", error);
     }
@@ -30,9 +30,9 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
 
   const handleDelete = () => {
     if (window.confirm(`Delete blog "${blog.title}" by ${blog.author}?`)) {
-      console.log("Eliminando blog con ID:", blog._id); // Log para depurar
+      console.log("Eliminando blog con ID:", blog._id);
       deleteBlog(blog._id).catch((error) => {
-        console.error("Error al eliminar el blog:", error); // Log de error si algo falla
+        console.error("Error al eliminar el blog:", error);
       });
     }
   };
