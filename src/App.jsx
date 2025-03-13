@@ -59,7 +59,8 @@ const App = () => {
     event.preventDefault();
     try {
       const blog = await blogService.create(newBlog);
-      setBlogs(blogs.concat(blog));
+      const updatedBlogs = [...blogs, blog].sort((a, b) => b.likes - a.likes);
+      setBlogs(updatedBlogs);
       setNewBlog({ title: "", author: "", url: "" });
       setErrorMessage("Blog added successfully");
       setTimeout(() => {
@@ -78,9 +79,10 @@ const App = () => {
   };
 
   const updateBlog = (updatedBlog) => {
-    setBlogs(
-      blogs.map((blog) => (blog._id === updatedBlog._id ? updatedBlog : blog))
-    );
+    const updatedBlogs = blogs
+      .map((blog) => (blog._id === updatedBlog._id ? updatedBlog : blog))
+      .sort((a, b) => b.likes - a.likes);
+    setBlogs(updatedBlogs);
   };
 
   return (
