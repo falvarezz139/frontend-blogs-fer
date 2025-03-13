@@ -78,8 +78,8 @@ Blog.propTypes = {
     likes: PropTypes.number.isRequired,
     user: PropTypes.shape({
       _id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired, // Validación de name
-      username: PropTypes.string.isRequired, // Validación de username
+      name: PropTypes.string.isRequired,
+      username: PropTypes.string.isRequired,
     }).isRequired,
     title: PropTypes.string.isRequired,
     author: PropTypes.string.isRequired,
