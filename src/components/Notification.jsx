@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-const Notification = ({ message }) => {
+const Notification = ({ message = "" }) => {
   if (!message) {
     return null;
   }
@@ -10,10 +10,6 @@ const Notification = ({ message }) => {
 
 Notification.propTypes = {
   message: PropTypes.string,
-};
-
-Notification.defaultProps = {
-  message: "",
 };
 
 export default Notification;
