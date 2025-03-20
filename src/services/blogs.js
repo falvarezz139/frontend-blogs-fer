@@ -20,13 +20,13 @@ const create = async (newBlog) => {
   return response.data;
 };
 
-// Actualizar likes
+// Actualiza likes
 const update = async (id, updatedBlog) => {
   const response = await axios.put(`${baseUrl}/${id}`, updatedBlog);
   return response.data;
 };
 
-// Eliminar un blog
+// Elimina un blog
 const deleteBlog = async (id) => {
   const config = {
     headers: { Authorization: token },

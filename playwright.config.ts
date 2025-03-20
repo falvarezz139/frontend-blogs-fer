@@ -1,9 +1,9 @@
-import { defineConfig } from '@playwright/test';
+import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
-  testDir: './tests', // Directorio donde estarán tus tests
+  testDir: "./tests",
   use: {
-    browserName: 'chromium', // Puedes cambiar a 'firefox' o 'webkit' si prefieres otro navegador
-    headless: true, // Ejecutará los tests sin abrir el navegador
+    browserName: "chromium",
+    headless: true, // Ejecuta test sin abrir navegador
   },
 });
